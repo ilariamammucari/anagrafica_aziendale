@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class CompanyController extends Controller
@@ -38,7 +39,16 @@ class CompanyController extends Controller
             'type' => 'required|integer',
         ]);
         
-        return Company::create($request->all());
+        return Company::create([
+            'user_id' => Auth::id(),
+            'businessName' => $request['businessName'],
+            'address' => $request['address'] ?? '',
+            'vat' =>  $request['vat'],
+            'taxCode' => $request['taxCode'],
+            'employees' => $request['employees'] ?? '',
+            'active' => $request['active'] ?? '',
+            'type' => $request['type'],
+        ]);
     }
 
     /**
@@ -75,7 +85,7 @@ class CompanyController extends Controller
     public function destroy($id)
     {
         Company::destroy($id);
-        return Response::json([
+        return response([
             'body' => 'No content'
         ], 204);
     }

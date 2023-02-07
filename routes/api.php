@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
@@ -15,11 +16,18 @@ use App\Http\Controllers\CompanyController;
 |
 */
 
+// public routes
 Route::get('/companies', [CompanyController::class, 'index']);
-Route::post('/companies', [CompanyController::class, 'store']);
-Route::get('/companies/{id}', [CompanyController::class, 'show']);
-Route::put('/companies/{id}', [CompanyController::class, 'update']);
-Route::delete('/companies/{id}', [CompanyController::class, 'destroy']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+
+// protected routes
+Route::group(['middleware' => ['auth:sanctum']], function(){
+    Route::post('/companies', [CompanyController::class, 'store']);
+    Route::get('/companies/{id}', [CompanyController::class, 'show']);
+    Route::put('/companies/{id}', [CompanyController::class, 'update']);
+    Route::delete('/companies/{id}', [CompanyController::class, 'destroy']);
+});
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
