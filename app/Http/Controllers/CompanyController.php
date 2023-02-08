@@ -7,6 +7,7 @@ use App\Services\CompanyService;
 
 class CompanyController extends Controller
 {
+    public $companyService;
     public function __construct(CompanyService $companyService){
         $this->companyService = $companyService;
     }
