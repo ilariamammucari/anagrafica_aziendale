@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthService{
 
-    public function registerAuthService($fields){
+    public function registerAuthService($fields)
+    {
         $user = User::create([
             'name' => $fields['name'],
             'email' => $fields['email'],
