@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Auth;
 class CompanyService{
 
     public function indexCompanyService(){
-        return Company::all();
+        $company = Company::all();
+        return $company;
     }
 
     public function createCompanyService($request){
@@ -23,23 +24,50 @@ class CompanyService{
             'type' => $request['type'],
         ]);
 
-        return $company;
+        if(isset($company)){
+            return $company;
+        }
+
+        return response([
+            'message' => 'Create non riuscito'
+        ]);
     }
 
     public function showCompanyService($id){
-        return Company::find($id);
+        $company = Company::find($id);
+        if(isset($company)){
+            return $company;
+        }
+
+        return response([
+            'message' => 'Show non riuscito'
+        ]);
     }
 
     public function updateCompanyService($request, $id){
         $company = Company::find($id);
-        $company->update($request->all());
-        return $company;
+        if(isset($company)){
+            $company->update($request->all());
+            return $company;
+        }
+
+        return response([
+            'message' => 'Update non riuscito'
+        ]);
     }
 
     public function destroyCompanyService($id){
-        Company::destroy($id);
+        $company = Company::find($id);
+        if(isset($company)){
+            $company->delete();
+            return response([
+                'message' => 'No content'
+            ], 204);
+        }
+
         return response([
-            'message' => 'No content'
-        ], 204);
+            'message' => 'Destroy non riuscito'
+        ]);
+
     }
 }
