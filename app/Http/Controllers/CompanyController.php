@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Company;
+use App\Services\CompanyService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class CompanyController extends Controller
 {
+    public function __construct(CompanyService $companyService){
+        $this->companyService = $companyService;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +22,7 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        return Company::all();
+        return $this->companyService->indexCompanyService();
     }
 
     /**
@@ -38,16 +43,7 @@ class CompanyController extends Controller
             'type' => 'required|integer',
         ]);
         
-        return Company::create([
-            'user_id' => Auth::id(),
-            'businessName' => $request['businessName'],
-            'address' => $request['address'] ?? '',
-            'vat' =>  $request['vat'],
-            'taxCode' => $request['taxCode'],
-            'employees' => $request['employees'] ?? '',
-            'active' => $request['active'] ?? '',
-            'type' => $request['type'],
-        ]);
+        return $this->companyService->createCompanyService($request);
     }
 
     /**
@@ -58,7 +54,7 @@ class CompanyController extends Controller
      */
     public function show($id)
     {
-        return Company::find($id);
+        return $this->companyService->showCompanyService($id);
     }
 
     /**
@@ -70,9 +66,7 @@ class CompanyController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $company = Company::find($id);
-        $company->update($request->all());
-        return $company;
+        return $this->companyService->updateCompanyService($request, $id);
     }
 
     /**
@@ -83,9 +77,6 @@ class CompanyController extends Controller
      */
     public function destroy($id)
     {
-        Company::destroy($id);
-        return response([
-            'body' => 'No content'
-        ], 204);
+        return $this->companyService->destroyCompanyService($id);
     }
 }
