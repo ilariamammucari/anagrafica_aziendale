@@ -17,7 +17,7 @@ use App\Http\Controllers\CompanyController;
 */
 
 // public routes
-Route::get('/companies', [CompanyController::class, 'index']);
+Route::get('/companies-all/{page?}/{perPage?}', [CompanyController::class, 'index']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 

@@ -11,6 +11,13 @@ class CompanyControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_guest_user_can_access_index_route()
+    {
+        $response = $this->get('/api/companies-all');
+
+        $response->assertStatus(200);
+    }
+
     public function test_auth_user_can_access_store_route()
     {
         $user = User::factory()->create();
@@ -21,7 +28,7 @@ class CompanyControllerTest extends TestCase
         $response->assertStatus(201);
     }
 
-    public function test_auth_user_can_access_store_show()
+    public function test_auth_user_can_access_show_route()
     {
         $user = User::factory()->create();
         $response = $this->actingAs($user);
@@ -32,7 +39,7 @@ class CompanyControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_auth_user_can_access_store_update()
+    public function test_auth_user_can_access_update_route()
     {
         $user = User::factory()->create();
         $response = $this->actingAs($user);
@@ -45,7 +52,7 @@ class CompanyControllerTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_auth_user_can_access_store_destroy()
+    public function test_auth_user_can_access_destroy_route()
     {
         $user = User::factory()->create();
         $response = $this->actingAs($user);

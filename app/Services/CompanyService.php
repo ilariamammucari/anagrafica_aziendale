@@ -7,8 +7,12 @@ use Illuminate\Support\Facades\Auth;
 
 class CompanyService{
 
-    public function indexCompanyService(){
+    public function indexCompanyService(int $page, int $perPage){
         $company = Company::all();
+        $company['meta'] = [
+            'page' => $page,
+            'perPage' => $perPage
+        ];
         return $company;
     }
 

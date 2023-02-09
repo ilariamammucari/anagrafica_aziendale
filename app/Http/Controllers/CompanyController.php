@@ -17,9 +17,9 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index($page = 0, $perPage = 0)
     {
-        return $this->companyService->indexCompanyService();
+        return $this->companyService->indexCompanyService($page, $perPage);
     }
 
     /**
