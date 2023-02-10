@@ -7,13 +7,18 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthService{
 
-    public function registerAuthService($fields)
+    public function registerAuthService($name, $email, $password)
     {
-        $user = User::create([
-            'name' => $fields['name'],
-            'email' => $fields['email'],
-            'password' => bcrypt($fields['password']),
-        ]);
+        $user = new User();
+
+        $data = [
+            'name' => $name,
+            'email' => $email,
+            'password' => bcrypt($password),
+        ];
+
+        $user->fill($data);
+        $user->save();
 
         $token = $user->createToken('mytoken')->plainTextToken;
         $user->remember_token = $token;
@@ -21,10 +26,10 @@ class AuthService{
         return $user;
     }
 
-    public function loginAuthService($fields){
-        $user = User::where('email', $fields['email'])->first();
+    public function loginAuthService($email, $password){
+        $user = User::where('email', $email)->first();
 
-        if( !$user || !Hash::check($fields['password'], $user->password) ){
+        if( !$user || !Hash::check($password, $user->password) ){
             return response([
                 'message' => 'Credenziali errate'
             ], 401);

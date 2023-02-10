@@ -12,9 +12,9 @@ class CompanyService{
         return $company;
     }
 
-    public function createCompanyService($model, $user_id, $businessName, $address, $vat, $taxCode, $employees, $active, $type)
+    public function createCompanyService($user_id, $businessName, $address, $vat, $taxCode, $employees, $active, $type)
     {
-        $company = $model;
+        $company = new Company();
 
         $data = [
             $company->user_id = $user_id,

@@ -43,7 +43,7 @@ class CompanyController extends Controller
             'type' => 'required|integer',
         ]);
 
-        return new CompanyResource($this->companyService->createCompanyService(new Company(), Auth::id(), $request->businessName, $request->address, $request->vat, $request->taxCode, $request->employees, $request->active, $request->type));
+        return new CompanyResource($this->companyService->createCompanyService(Auth::id(), $request->businessName, $request->address, $request->vat, $request->taxCode, $request->employees, $request->active, $request->type));
     }
 
     public function show(Company $company)
