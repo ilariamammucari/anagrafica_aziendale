@@ -7,71 +7,41 @@ use Illuminate\Support\Facades\Auth;
 
 class CompanyService{
 
-    public function indexCompanyService(int $page, int $perPage){
+    public function indexCompanyService(){
         $company = Company::all();
-        $company['meta'] = [
-            'page' => $page,
-            'perPage' => $perPage
-        ];
         return $company;
     }
 
-    public function createCompanyService($request){
-        $company = Company::create([
-            'user_id' => Auth::id(),
-            'businessName' => $request['businessName'],
-            'address' => $request['address'],
-            'vat' =>  $request['vat'],
-            'taxCode' => $request['taxCode'],
-            'employees' => $request['employees'],
-            'active' => $request['active'],
-            'type' => $request['type'],
-        ]);
+    public function createCompanyService($company, $request)
+    {
+        $company_res = $company;
 
-        if(isset($company)){
-            return $company;
+        $company_res->user_id = Auth::id();
+
+        if( !isset($request['active']) ){
+            $request['active'] = 0;
         }
 
-        return response([
-            'message' => 'Create non riuscito'
-        ]);
+        $company_res->fill($request);
+        $company_res->save();
+
+        return $company_res;
     }
 
-    public function showCompanyService($id){
-        $company = Company::find($id);
-        if(isset($company)){
-            return $company;
-        }
-
-        return response([
-            'message' => 'Show non riuscito'
-        ]);
+    public function showCompanyService($company)
+    {
+        return $company;
     }
 
-    public function updateCompanyService($request, $id){
-        $company = Company::find($id);
-        if(isset($company)){
-            $company->update($request->all());
-            return $company;
-        }
-
-        return response([
-            'message' => 'Update non riuscito'
-        ]);
+    public function updateCompanyService($request, $company)
+    {
+        $company->update($request);
+        return $company;
     }
 
-    public function destroyCompanyService($id){
-        $company = Company::find($id);
-        if(isset($company)){
-            $company->delete();
-            return response([
-                'message' => 'No content'
-            ], 204);
-        }
+    public function destroyCompanyService($company){
 
-        return response([
-            'message' => 'Destroy non riuscito'
-        ]);
+        return $company->delete();
 
     }
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
+use App\Models\Company;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,16 +18,20 @@ use App\Http\Controllers\CompanyController;
 */
 
 // public routes
-Route::get('/companies-all/{page?}/{perPage?}', [CompanyController::class, 'index']);
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::get('/companies', [CompanyController::class, 'index']);
+Route::controller(AuthController::class)->group(function(){
+    Route::post('/register', 'register')->name('register');
+    Route::post('/login', 'login')->name('login');
+});
 
 // protected routes
 Route::group(['middleware' => ['auth:sanctum']], function(){
-    Route::post('/companies', [CompanyController::class, 'store']);
-    Route::get('/companies/{id}', [CompanyController::class, 'show']);
-    Route::patch('/companies/{id}', [CompanyController::class, 'update']);
-    Route::delete('/companies/{id}', [CompanyController::class, 'destroy']);
+    Route::controller(CompanyController::class)->group(function(){
+        Route::post('/companies', 'store')->name('store');
+        Route::get('/companies/{company}', 'show')->name('show');
+        Route::patch('/companies/{company}', 'update')->name('update');
+        Route::delete('/companies/{company}', 'destroy')->name('destroy');
+    });
 });
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

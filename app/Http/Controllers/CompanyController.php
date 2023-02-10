@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CompanyResource;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use App\Services\CompanyService;
 
@@ -19,7 +21,7 @@ class CompanyController extends Controller
      */
     public function index($page = 0, $perPage = 0)
     {
-        return $this->companyService->indexCompanyService($page, $perPage);
+        return CompanyResource::collection($this->companyService->indexCompanyService($page, $perPage));
     }
 
     /**
@@ -32,48 +34,32 @@ class CompanyController extends Controller
     {
         $request->validate([
             'businessName' => 'required|max:255',
-            'address' => 'max:255',
+            'address' => 'max:255|nullable',
             'vat' =>  'required|digits:11',
             'taxCode' => 'required|max:11',
-            'employees' => 'integer',
-            'active' => 'boolean',
+            'employees' => 'integer|nullable',
+            'active' => 'boolean|nullable',
             'type' => 'required|integer',
         ]);
-        
-        return $this->companyService->createCompanyService($request);
+
+        return new CompanyResource($this->companyService->createCompanyService(new Company(), $request->all()));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function show($id)
+    public function show(Company $company)
     {
-        return $this->companyService->showCompanyService($id);
+        return new CompanyResource($this->companyService->showCompanyService($company));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request, Company $company)
     {
-        return $this->companyService->updateCompanyService($request, $id);
+        return new CompanyResource($this->companyService->updateCompanyService($request->all(), $company));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function destroy($id)
+    public function destroy(Company $company)
     {
-        return $this->companyService->destroyCompanyService($id);
+        $this->companyService->destroyCompanyService($company);
+        return response()->json([
+            'message' => 'No content'
+        ], 204);
     }
 }
