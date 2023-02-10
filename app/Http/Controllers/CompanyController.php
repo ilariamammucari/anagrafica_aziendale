@@ -16,9 +16,9 @@ class CompanyController extends Controller
         $this->companyService = $companyService;
     }
 
-    public function index($page = 0, $perPage = 0)
+    public function index()
     {
-        return CompanyResource::collection($this->companyService->indexCompanyService($page, $perPage));
+        return CompanyResource::collection($this->companyService->indexCompanyService());
     }
 
     public function store(CompanyStoreRequest $request)
