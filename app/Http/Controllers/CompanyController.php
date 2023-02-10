@@ -6,6 +6,7 @@ use App\Http\Resources\CompanyResource;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use App\Services\CompanyService;
+use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
@@ -42,7 +43,7 @@ class CompanyController extends Controller
             'type' => 'required|integer',
         ]);
 
-        return new CompanyResource($this->companyService->createCompanyService(new Company(), $request->all()));
+        return new CompanyResource($this->companyService->createCompanyService(new Company(), Auth::id(), $request->businessName, $request->address, $request->vat, $request->taxCode, $request->employees, $request->active, $request->type));
     }
 
     public function show(Company $company)

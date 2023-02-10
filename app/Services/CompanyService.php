@@ -12,20 +12,25 @@ class CompanyService{
         return $company;
     }
 
-    public function createCompanyService($company, $request)
+    public function createCompanyService($model, $user_id, $businessName, $address, $vat, $taxCode, $employees, $active, $type)
     {
-        $company_res = $company;
+        $company = $model;
 
-        $company_res->user_id = Auth::id();
+        $data = [
+            $company->user_id = $user_id,
+            $company->businessName = $businessName,
+            $company->address = $address,
+            $company->vat = $vat,
+            $company->taxCode = $taxCode,
+            $company->employees = $employees,
+            $company->active = $active ?? 0,
+            $company->type = $type,
+        ];
 
-        if( !isset($request['active']) ){
-            $request['active'] = 0;
-        }
+        $company->fill($data);
+        $company->save();
 
-        $company_res->fill($request);
-        $company_res->save();
-
-        return $company_res;
+        return $company;
     }
 
     public function showCompanyService($company)
