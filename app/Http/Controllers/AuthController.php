@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Services\AuthService;
 use Illuminate\Http\Request;
+use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
@@ -19,7 +20,7 @@ class AuthController extends Controller
             'password' => 'required|string|confirmed'
         ]);
 
-        return $this->authService->registerAuthService($fields);
+        return new UserResource($this->authService->registerAuthService($fields));
     }
 
     public function login(Request $request){
@@ -28,6 +29,6 @@ class AuthController extends Controller
             'password' => 'required|string'
         ]);
 
-        return $this->authService->loginAuthService($fields);
+        return new UserResource($this->authService->loginAuthService($fields));
     }
 }

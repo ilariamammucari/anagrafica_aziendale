@@ -44,9 +44,8 @@ class CompanyService{
         return $company;
     }
 
-    public function destroyCompanyService($company){
-
+    public function destroyCompanyService($company)
+    {
         return $company->delete();
-
     }
 }

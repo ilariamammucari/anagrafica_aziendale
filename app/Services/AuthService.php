@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
@@ -17,11 +16,9 @@ class AuthService{
         ]);
 
         $token = $user->createToken('mytoken')->plainTextToken;
+        $user->remember_token = $token;
 
-        $user_res = new UserResource($user);
-        $user_res['remember_token'] = $token;
-
-        return $user_res;
+        return $user;
     }
 
     public function loginAuthService($fields){
@@ -34,11 +31,9 @@ class AuthService{
         }
 
         $token = $user->createToken('mytoken')->plainTextToken;
+        $user->remember_token = $token;
 
-        $user_res = new UserResource($user);
-        $user_res['remember_token'] = $token;
-
-        return $user_res;
+        return $user;
     }
 
 }
