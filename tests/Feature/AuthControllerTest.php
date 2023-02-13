@@ -16,6 +16,7 @@ class AuthControllerTest extends TestCase
         $response = $this->post('/api/register', $user);
 
         $response->assertStatus(302)->assertRedirect('/');
+        $this->assertEquals(1,User::all()->count());
     }
 
     public function test_login()
