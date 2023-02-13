@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use App\Models\User;
 use Tests\TestCase;
@@ -26,6 +26,6 @@ class AuthControllerTest extends TestCase
             'password' => 'password',
         ]);
 
-        $response->assertStatus(201);
+        $response->assertStatus(200);
     }
 }

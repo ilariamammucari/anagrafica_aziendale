@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use App\Models\Company;
 use App\Models\User;
@@ -13,7 +13,7 @@ class CompanyControllerTest extends TestCase
 
     public function test_guest_user_can_access_index_route()
     {
-        $response = $this->get('/api/companies-all');
+        $response = $this->get('/api/companies');
 
         $response->assertStatus(200);
     }
