@@ -25,7 +25,11 @@ class CompanyResource extends JsonResource
             'employees' => $this->employees,
             'active' => $this->active,
             'type' => $this->type,
-            'user' => $this->user
+            'user' => $this->user,
+            'meta' => [
+                'page' => request('page') ?? 0,
+                'perPage' => request('perPage') ?? 0,
+            ]
         ];
     }
 }

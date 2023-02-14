@@ -18,7 +18,7 @@ class CompanyController extends Controller
 
     public function index()
     {
-        return CompanyResource::collection($this->companyService->indexCompanyService());
+        return CompanyResource::collection($this->companyService->indexCompanyService());;
     }
 
     public function store(CompanyStoreRequest $request)
