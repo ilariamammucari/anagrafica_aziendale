@@ -27,8 +27,8 @@ class CompanyResource extends JsonResource
             'type' => $this->type,
             'user' => $this->user,
             'meta' => [
-                'page' => $request->input('page', 0),
-                'perPage' => $request->input('perPage', 0),
+                'page' => $request->query('page', 0),
+                'perPage' => $request->query('perPage', 0),
             ]
         ];
     }
