@@ -15,7 +15,7 @@ class CompanyFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => Auth::id(),
+            'user_id' => Auth::id() ?? 1,
             'businessName' => $this->faker->company,
             'address' => $this->faker->company,
             'vat' =>  '01234567891',

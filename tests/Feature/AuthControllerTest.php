@@ -13,7 +13,7 @@ class AuthControllerTest extends TestCase
     public function test_register()
     {
         $user = User::factory()->create()->toArray();
-        $response = $this->post('/api/register', $user);
+        $response = $this->post(route('register'), $user);
 
         $response->assertStatus(302)->assertRedirect('/');
         $this->assertEquals(1,User::all()->count());
@@ -21,9 +21,9 @@ class AuthControllerTest extends TestCase
 
     public function test_login()
     {
-        $user = User::factory()->create()->toArray();
-        $response = $this->post('/api/login', [
-            'email' => $user['email'],
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->post(route('login'), [
+            'email' => $user->email,
             'password' => 'password',
         ]);
 
