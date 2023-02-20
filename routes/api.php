@@ -18,7 +18,7 @@ use App\Models\Company;
 */
 
 // public routes
-Route::get('/companies', [CompanyController::class, 'index']);
+Route::get('/companies', [CompanyController::class, 'index'])->name('index');
 Route::controller(AuthController::class)->group(function(){
     Route::post('/register', 'register')->name('register');
     Route::post('/login', 'login')->name('login');

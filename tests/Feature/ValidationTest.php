@@ -12,10 +12,9 @@ class ValidationTest extends TestCase
     use RefreshDatabase;
 
     public function test_validation_login_user_email_required(){
-        $response = $this->postJson('/api/login', ['email', 'password' => 'password']);
+        $response = $this->postJson(route('login'), ['email', 'password' => 'password']);
 
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors('email');
+        $response->assertStatus(422)->assertJsonValidationErrors('email');
         $this->assertSame(
             'The email field is required.',
             $response->json('errors.email.0')
@@ -24,10 +23,9 @@ class ValidationTest extends TestCase
     }
 
     public function test_validation_login_user_password_required(){
-        $response = $this->postJson('/api/login', ['email' => 'test@gmail.com', 'password']);
+        $response = $this->postJson(route('login'), ['email' => 'test@gmail.com', 'password']);
 
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors('password');
+        $response->assertStatus(422)->assertJsonValidationErrors('password');
         $this->assertSame(
             'The password field is required.',
             $response->json('errors.password.0')
@@ -37,10 +35,9 @@ class ValidationTest extends TestCase
 
     public function test_validation_company_businessName_required(){
         $user = User::factory()->create();
-        $response = $this->actingAs($user);
 
         $company = Company::factory()->create()->toArray();
-        $response = $this->postJson('/api/companies', [
+        $response = $this->actingAs($user)->postJson(route('store'), [
             'businessName',
             'address' => $company['address'],
             'vat' =>  $company['vat'],
@@ -50,8 +47,7 @@ class ValidationTest extends TestCase
             'type' => $company['type'],
         ]);
 
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors('businessName');
+        $response->assertStatus(422)->assertJsonValidationErrors('businessName');
         $this->assertSame(
             'The business name field is required.',
             $response->json('errors.businessName.0')
@@ -61,10 +57,9 @@ class ValidationTest extends TestCase
 
     public function test_validation_company_address_nullable(){
         $user = User::factory()->create();
-        $response = $this->actingAs($user);
 
         $company = Company::factory()->create()->toArray();
-        $response = $this->postJson('/api/companies', [
+        $response = $this->actingAs($user)->postJson(route('store'), [
             'businessName' => $company['businessName'],
             'address',
             'vat' =>  $company['vat'],
@@ -74,17 +69,15 @@ class ValidationTest extends TestCase
             'type' => $company['type'],
         ]);
 
-        $response->assertStatus(201);
-        $response->assertJsonMissingValidationErrors('address');
+        $response->assertStatus(201)->assertJsonMissingValidationErrors('address');
 
     }
 
     public function test_validation_company_vat_required(){
         $user = User::factory()->create();
-        $response = $this->actingAs($user);
 
         $company = Company::factory()->create()->toArray();
-        $response = $this->postJson('/api/companies', [
+        $response = $this->actingAs($user)->postJson(route('store'), [
             'businessName' => $company['businessName'],
             'address' => $company['address'],
             'vat',
@@ -94,8 +87,7 @@ class ValidationTest extends TestCase
             'type' => $company['type'],
         ]);
 
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors('vat');
+        $response->assertStatus(422)->assertJsonValidationErrors('vat');
         $this->assertSame(
             'The vat field is required.',
             $response->json('errors.vat.0')
@@ -105,10 +97,9 @@ class ValidationTest extends TestCase
 
     public function test_validation_company_taxCode_required(){
         $user = User::factory()->create();
-        $response = $this->actingAs($user);
 
         $company = Company::factory()->create()->toArray();
-        $response = $this->postJson('/api/companies', [
+        $response = $this->actingAs($user)->postJson(route('store'), [
             'businessName' => $company['businessName'],
             'address' => $company['address'],
             'vat' =>  $company['vat'],
@@ -118,8 +109,7 @@ class ValidationTest extends TestCase
             'type' => $company['type'],
         ]);
 
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors('taxCode');
+        $response->assertStatus(422)->assertJsonValidationErrors('taxCode');
         $this->assertSame(
             'The tax code field is required.',
             $response->json('errors.taxCode.0')
@@ -129,10 +119,9 @@ class ValidationTest extends TestCase
 
     public function test_validation_company_employees_nullable(){
         $user = User::factory()->create();
-        $response = $this->actingAs($user);
 
         $company = Company::factory()->create()->toArray();
-        $response = $this->postJson('/api/companies', [
+        $response = $this->actingAs($user)->postJson(route('store'), [
             'businessName' => $company['businessName'],
             'address' => $company['address'],
             'vat' =>  $company['vat'],
@@ -142,17 +131,15 @@ class ValidationTest extends TestCase
             'type' => $company['type'],
         ]);
 
-        $response->assertStatus(201);
-        $response->assertJsonMissingValidationErrors('employees');
+        $response->assertStatus(201)->assertJsonMissingValidationErrors('employees');
 
     }
 
     public function test_validation_company_active_nullable(){
         $user = User::factory()->create();
-        $response = $this->actingAs($user);
 
         $company = Company::factory()->create()->toArray();
-        $response = $this->postJson('/api/companies', [
+        $response = $this->actingAs($user)->postJson(route('store'), [
             'businessName' => $company['businessName'],
             'address' => $company['address'],
             'vat' =>  $company['vat'],
@@ -162,17 +149,15 @@ class ValidationTest extends TestCase
             'type' => $company['type'],
         ]);
 
-        $response->assertStatus(201);
-        $response->assertJsonMissingValidationErrors('active');
+        $response->assertStatus(201)->assertJsonMissingValidationErrors('active');
 
     }
 
     public function test_validation_company_type_required(){
         $user = User::factory()->create();
-        $response = $this->actingAs($user);
 
         $company = Company::factory()->create()->toArray();
-        $response = $this->postJson('/api/companies', [
+        $response = $this->actingAs($user)->postJson(route('store'), [
             'businessName' => $company['businessName'],
             'address' => $company['address'],
             'vat' =>  $company['vat'],
@@ -182,8 +167,7 @@ class ValidationTest extends TestCase
             'type',
         ]);
 
-        $response->assertStatus(422);
-        $response->assertJsonValidationErrors('type');
+        $response->assertStatus(422)->assertJsonValidationErrors('type');
         $this->assertSame(
             'The type field is required.',
             $response->json('errors.type.0')
