@@ -26,7 +26,8 @@ Route::controller(AuthController::class)->group(function(){
 
 // protected routes
 Route::group(['middleware' => ['auth:sanctum']], function(){
-    Route::controller(CompanyController::class)->group(function(){
+    // Missing prefix!
+    Route::as('company.')->controller(CompanyController::class)->group(function(){
         Route::post('/companies', 'store')->name('store');
         Route::get('/companies/{company}', 'show')->name('show');
         Route::patch('/companies/{company}', 'update')->name('update');

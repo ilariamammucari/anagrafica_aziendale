@@ -31,7 +31,7 @@ class CompanyControllerTest extends TestCase
             'type' => 1,
         ];
 
-        $company = (new CompanyService)->createCompanyService($data['user_id'], $data['businessName'], $data['address'], $data['vat'], $data['taxCode'], $data['employees'], $data['active'], $data['type']);
+        $company = (new CompanyService)->createCompany($data['user_id'], $data['businessName'], $data['address'], $data['vat'], $data['taxCode'], $data['employees'], $data['active'], $data['type']);
 
         $this->assertInstanceOf(Company::class, $company);
         $this->assertEquals($data['businessName'], $company->businessName);

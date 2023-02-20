@@ -3,34 +3,25 @@
 namespace App\Services;
 
 use App\Models\Company;
+use App\Dto\CompanyData;
 use Illuminate\Support\Facades\Auth;
 
 class CompanyService{
 
     public function indexCompanyService(){
+        // All the pagination data from the query string is missing!
         $company = Company::all();
         return $company;
     }
 
-    public function createCompanyService($user_id, $businessName, $address, $vat, $taxCode, $employees, $active, $type)
+    public function createCompany(CompanyData $data): Company
     {
         $company = new Company();
+        $company->fill($data->toArray())
+            ->creator()
+            ->associate($data->creator);
 
-        $data = [
-            $company->user_id = $user_id,
-            $company->businessName = $businessName,
-            $company->address = $address,
-            $company->vat = $vat,
-            $company->taxCode = $taxCode,
-            $company->employees = $employees,
-            $company->active = $active ?? 0,
-            $company->type = $type,
-        ];
-
-        $company->fill($data);
-        $company->save();
-
-        return $company;
+        return tap($company, fn (Company $company) => $company->save());
     }
 
     public function showCompanyService($company)

@@ -11,20 +11,26 @@ use Illuminate\Support\Facades\Auth;
 
 class CompanyController extends Controller
 {
-    public $companyService;
-    public function __construct(CompanyService $companyService){
-        $this->companyService = $companyService;
+    public function __construct(private readonly CompanyService $companyService){
+        // Company service cannot be public! It's a service, no one should access to it publicly... It's a private instance
+        // that can be only read by the controller.
     }
 
     public function index()
     {
-        return CompanyResource::collection($this->companyService->indexCompanyService());;
+        // Better to create a dedicated collection resource (https://laravel.com/docs/9.x/eloquent-resources#generating-resource-collections)
+        // Not mandatory... But a better choice anyway. Another thing... you're not passing to the service any pagination data from query string
+        // it should be: companyService->listCompanies($request->query('perPage'), $request->query('page')) or something similar
+        return CompanyResource::collection($this->companyService->indexCompanyService());
     }
 
-    public function store(CompanyStoreRequest $request)
+    public function store(CompanyStoreRequest $request): CompanyResource
     {
-        $request->validated();
-        return new CompanyResource($this->companyService->createCompanyService(Auth::id(), $request->businessName, $request->address, $request->vat, $request->taxCode, $request->employees, $request->active, $request->type));
+        $company = $this->companyService->createCompany(
+            $request->toDto()
+        );
+
+        return new CompanyResource($company);
     }
 
     public function show(Company $company)

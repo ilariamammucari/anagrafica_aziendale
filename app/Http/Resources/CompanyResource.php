@@ -16,8 +16,7 @@ class CompanyResource extends JsonResource
     {
 
         return [
-            'id' => $this->id,
-            'user_id' => $this->user_id,
+            // 'id' => $this->id, // Avoid passing IDs back as response... better use slugs when possible!
             'businessName' => $this->businessName,
             'address' => $this->address,
             'vat' =>  $this->vat,
@@ -25,11 +24,7 @@ class CompanyResource extends JsonResource
             'employees' => $this->employees,
             'active' => $this->active,
             'type' => $this->type,
-            'user' => $this->user,
-            'meta' => [
-                'page' => $request->query('page', 0),
-                'perPage' => $request->query('perPage', 0),
-            ]
+            'creator' => $this->whenLoaded('creator', new UserResource($this->creator)),
         ];
     }
 }
